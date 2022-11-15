@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../state";
@@ -29,11 +29,22 @@ const EditPopup: React.FC= () => {
     openEditPopup(false);
   };
 
+  console.log(postToEdit.title, postToEdit.body)
+
   const [updatedPostData, setUpdatedPostData] = useState<IPost>({
-    id: postToEditID,
-    title: postToEdit.title,
-    body: postToEdit.body,
+    id: 0,
+    title: "",
+    body: "",
   });
+
+  useEffect(() => {
+      setUpdatedPostData({
+        id: postToEditID,
+        title: postToEdit.title,
+        body: postToEdit.body,
+      })
+  }, [postToEditID])
+  
 
   const handleChange = (key: string, value: string) => {
     setUpdatedPostData((state) => ({ ...state, [key]: value }));
