@@ -1,19 +1,19 @@
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators } from "../state";
-
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import EditIcon from '@mui/icons-material/Edit';
-import Fab from '@mui/material/Fab';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Button,
+  IconButton,
+  Typography,
+  Fab,
+} from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
 
 import { IPost } from "../state/actions";
-import { EditPopup } from "./";
+import { actionCreators } from "../state";
 
 interface IProps {
   post: IPost;
@@ -21,7 +21,11 @@ interface IProps {
 
 const Post: React.FC<IProps> = ({ post }) => {
   const dispatch = useDispatch();
-  const { deletePost, openEditPopup, fetchPostToEdit } = bindActionCreators(actionCreators, dispatch);
+  const { deletePost, openEditPopup, fetchPostToEdit } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
+  const [cardElevation, setCardElevation] = useState<number>(2);
   return (
     <Card
       sx={{
@@ -30,6 +34,9 @@ const Post: React.FC<IProps> = ({ post }) => {
         flexDirection: "column",
         justifyContent: "space-between",
       }}
+      onMouseEnter={() => setCardElevation(5)}
+      onMouseLeave={() => setCardElevation(2)}
+      elevation={cardElevation}
     >
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -51,26 +58,26 @@ const Post: React.FC<IProps> = ({ post }) => {
         </Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button
-            color="error"
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-            size="small"
-            onClick={() => deletePost(post.id ? post.id : 0)}
-          >
-            Delete
-          </Button>
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              openEditPopup(true)
-              fetchPostToEdit(post.id ? post.id : 0)
-            }}
-          >
-            <Fab color="primary" aria-label="edit" size="small">
-              <EditIcon />
-            </Fab>
-          </IconButton>
+        <Button
+          color="error"
+          variant="outlined"
+          startIcon={<Delete />}
+          size="small"
+          onClick={() => deletePost(post.id ? post.id : 0)}
+        >
+          Delete
+        </Button>
+        <IconButton
+          aria-label="delete"
+          onClick={() => {
+            openEditPopup(true);
+            fetchPostToEdit(post.id ? post.id : 0);
+          }}
+        >
+          <Fab color="primary" aria-label="edit" size="small">
+            <Edit />
+          </Fab>
+        </IconButton>
       </CardActions>
     </Card>
   );
