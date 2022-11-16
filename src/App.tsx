@@ -12,17 +12,17 @@ import {
   PostModal,
   NavBar,
   SideBar,
-  FormPopup,
+  NewFormPopup,
   Snackbar,
   EditPopup,
 } from "./components";
 
 const App: React.FC = () => {
 
-  const cardElevation = 1;
   const posts: PostState = useSelector((state: State) => state.data);
   const isFormOpen = useSelector((state: State) => state.isFormOpen);
   const isAlertOpen = useSelector((state: State) => state.isAlertOpen);
+  const isPopupOpen = useSelector((state: State) => state.isPopupOpen);
   const dispatch = useDispatch();
   const { fetchData, openForm, openAlert } = bindActionCreators(
     actionCreators,
@@ -38,7 +38,7 @@ const App: React.FC = () => {
       <NavBar />
       <SideBar />
       <Container maxWidth="md">
-        <FormPopup />
+        <NewFormPopup />
         <EditPopup />
         <Box
           sx={{ m: 3 }}
@@ -58,6 +58,9 @@ const App: React.FC = () => {
                   openAlert(false);
                 }
               }}
+              component={motion.button}
+              whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+              whileTap={{ scale: 0.95 }}
             >
               {isFormOpen ? "Close Form" : "New Post"}
             </Button>
@@ -65,20 +68,10 @@ const App: React.FC = () => {
         </Box>
         <PostModal />
         <Box sx={{ mb: 3 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             {posts.map((post) => (
               <Grid item md={6} xs={12} key={post.id}>
-                <motion.div
-                  whileHover={{ scale: 1.05, cursor: "pointer" }}
-                  style={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Post post={post} />
-                </motion.div>
+                <Post post={post} />
               </Grid>
             ))}
           </Grid>

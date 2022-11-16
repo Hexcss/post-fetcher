@@ -1,8 +1,8 @@
 export { default as Post } from "./Post";
-export { default as PostModal } from "./PostModal";
-export { default as AlertSuccess } from "./AlertSuccess";
-export { default as NavBar } from "./NavBar";
-export { default as SideBar } from "./SideBar";
-export { default as FormPopup } from "./FormPopup";
-export { default as Snackbar } from "./SnackBar"
-export { default as EditPopup } from "./EditPopup";
+export { default as PostModal } from "./Forms/PostModal";
+export { default as AlertSuccess } from "./Alerts/AlertSuccess";
+export { default as NavBar } from "./AppBars/NavBar";
+export { default as SideBar } from "./AppBars/SideBar";
+export { default as NewFormPopup } from "./Forms/NewFormPopup";
+export { default as Snackbar } from "./Alerts/SnackBar"
+export { default as EditPopup } from "./Forms/EditFormPopup";

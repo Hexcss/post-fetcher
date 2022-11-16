@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
+import { actionCreators, State } from "../../state";
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Collapse from '@mui/material/Collapse';
+import { motion } from "framer-motion";
 
-import { IPost } from "../state/actions";
-import { AlertSuccess } from "./index";
+import { IPost } from "../../state/actions";
+import AlertSuccess from "../Alerts/AlertSuccess";
 
 const PostModal: React.FC = () => {
   const [newPostData, setNewPostData] = useState<IPost>({
@@ -50,7 +51,9 @@ const PostModal: React.FC = () => {
           <TextField required label="Post Body" variant="filled" fullWidth multiline minRows={3} maxRows={5} value={newPostData.body} name="body" onChange={(e) =>
             handleChange(e.target.name, e.target.value)
           } />
-          <Button type="submit" variant="contained" color="success">
+          <Button type="submit" variant="contained" color="success" component={motion.button}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}>
             Submit
           </Button>
         </Stack>

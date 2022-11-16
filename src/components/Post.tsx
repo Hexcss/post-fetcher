@@ -11,6 +11,7 @@ import {
   Fab,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
+import { motion } from "framer-motion";
 
 import { IPost } from "../state/actions";
 import { actionCreators } from "../state";
@@ -37,6 +38,8 @@ const Post: React.FC<IProps> = ({ post }) => {
       onMouseEnter={() => setCardElevation(5)}
       onMouseLeave={() => setCardElevation(2)}
       elevation={cardElevation}
+      component={motion.div}
+      whileHover={{ scale: 1.05, cursor: "pointer" }}
     >
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>

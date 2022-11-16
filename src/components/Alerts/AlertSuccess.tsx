@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
+import { actionCreators, State } from "../../state";
 
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';

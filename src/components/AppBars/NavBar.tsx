@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
+import { actionCreators, State } from "../../state";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import * as React from 'react';
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
+import { motion } from "framer-motion";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -13,54 +14,45 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import { IPost, PostState } from "../state/actions";
+import { IPost } from "../../state/actions";
+import { actionCreators, State } from "../../state";
+import { newspaper, flip, dropIn, badSuspension } from "../../animations";
 
-const EditPopup: React.FC= () => {
-
-  const isEditOpen: boolean = useSelector((state: State) => state.isEditOpen);
-  const postToEditID: number = useSelector((state:State) => state.postToEditID);
-  const posts: PostState = useSelector((state: State) => state.data);
-  const postIndex: number = posts.findIndex(post => post.id === postToEditID);
-  const postToEdit: IPost = {...posts[postIndex]};
+const NewFormPopup: React.FC = () => {
+  const isPopupOpen: boolean = useSelector((state: State) => state.isPopupOpen);
   const dispatch = useDispatch();
-  const { editPost, openEditPopup } = bindActionCreators(actionCreators, dispatch);
+  const { addPost, openPopup, openSnackbar } = bindActionCreators(actionCreators, dispatch);
 
   const handleClose = (): void => {
-    openEditPopup(false);
+    openPopup(false);
   };
 
-  console.log(postToEdit.title, postToEdit.body)
-
-  const [updatedPostData, setUpdatedPostData] = useState<IPost>({
-    id: 0,
+  const [newPostData, setNewPostData] = useState<IPost>({
+    id: Math.round(Math.random() * 100),
     title: "",
     body: "",
   });
 
-  useEffect(() => {
-      setUpdatedPostData({
-        id: postToEditID,
-        title: postToEdit.title,
-        body: postToEdit.body,
-      })
-  }, [postToEditID])
-  
-
   const handleChange = (key: string, value: string) => {
-    setUpdatedPostData((state) => ({ ...state, [key]: value }));
+    setNewPostData((state) => ({ ...state, [key]: value }));
   };
 
   return (
-    <>
-      <Dialog open={isEditOpen} onClose={handleClose} fullWidth>
-        <DialogTitle>Edit Post</DialogTitle>
+      <Dialog open={isPopupOpen} onClose={handleClose} fullWidth>
+        <motion.div variants={flip} initial="hidden" animate="visible" exit="exit" >
+        <DialogTitle>Add New Post</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ mb: 1}}>Edit Post With Id: {postToEditID}</DialogContentText>
+          <DialogContentText>Create A New Post</DialogContentText>
           <Box
             component="form"
             onSubmit={(e) => {
               e.preventDefault();
-              editPost(postToEditID, updatedPostData);
+              addPost(newPostData);
+              openSnackbar(true);
+              setNewPostData({
+                title: "",
+                body: "",
+              });
               handleClose();
             }}
           >
@@ -70,7 +62,7 @@ const EditPopup: React.FC= () => {
                 label="Post Title"
                 variant="filled"
                 fullWidth
-                value={updatedPostData.title}
+                value={newPostData.title}
                 name="title"
                 onChange={(e) => handleChange(e.target.name, e.target.value)}
               />
@@ -82,20 +74,20 @@ const EditPopup: React.FC= () => {
                 multiline
                 minRows={3}
                 maxRows={5}
-                value={updatedPostData.body}
+                value={newPostData.body}
                 name="body"
                 onChange={(e) => handleChange(e.target.name, e.target.value)}
               />
             </Stack>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Add</Button>
             </DialogActions>
           </Box>
         </DialogContent>
+        </motion.div>
       </Dialog>
-    </>
   );
 };
 
-export default EditPopup;
+export default NewFormPopup;

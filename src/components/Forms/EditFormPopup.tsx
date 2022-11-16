@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
+import { actionCreators, State } from "../../state";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -13,43 +13,54 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import { IPost } from "../state/actions";
+import { IPost, PostState } from "../../state/actions";
 
-const FormPopup: React.FC = () => {
-  const isPopupOpen: boolean = useSelector((state: State) => state.isPopupOpen);
+const EditPopup: React.FC= () => {
+
+  const isEditOpen: boolean = useSelector((state: State) => state.isEditOpen);
+  const postToEditID: number = useSelector((state:State) => state.postToEditID);
+  const posts: PostState = useSelector((state: State) => state.data);
+  const postIndex: number = posts.findIndex(post => post.id === postToEditID);
+  const postToEdit: IPost = {...posts[postIndex]};
   const dispatch = useDispatch();
-  const { addPost, openPopup, openSnackbar } = bindActionCreators(actionCreators, dispatch);
+  const { editPost, openEditPopup } = bindActionCreators(actionCreators, dispatch);
 
   const handleClose = (): void => {
-    openPopup(false);
+    openEditPopup(false);
   };
 
-  const [newPostData, setNewPostData] = useState<IPost>({
-    id: Math.round(Math.random() * 100),
+  console.log(postToEdit.title, postToEdit.body)
+
+  const [updatedPostData, setUpdatedPostData] = useState<IPost>({
+    id: 0,
     title: "",
     body: "",
   });
 
+  useEffect(() => {
+      setUpdatedPostData({
+        id: postToEditID,
+        title: postToEdit.title,
+        body: postToEdit.body,
+      })
+  }, [postToEditID])
+  
+
   const handleChange = (key: string, value: string) => {
-    setNewPostData((state) => ({ ...state, [key]: value }));
+    setUpdatedPostData((state) => ({ ...state, [key]: value }));
   };
 
   return (
-    <div>
-      <Dialog open={isPopupOpen} onClose={handleClose} fullWidth>
-        <DialogTitle>Add New Post</DialogTitle>
+    <>
+      <Dialog open={isEditOpen} onClose={handleClose} fullWidth>
+        <DialogTitle>Edit Post</DialogTitle>
         <DialogContent>
-          <DialogContentText>Create A New Post</DialogContentText>
+          <DialogContentText sx={{ mb: 1}}>Edit Post With Id: {postToEditID}</DialogContentText>
           <Box
             component="form"
             onSubmit={(e) => {
               e.preventDefault();
-              addPost(newPostData);
-              openSnackbar(true);
-              setNewPostData({
-                title: "",
-                body: "",
-              });
+              editPost(postToEditID, updatedPostData);
               handleClose();
             }}
           >
@@ -59,7 +70,7 @@ const FormPopup: React.FC = () => {
                 label="Post Title"
                 variant="filled"
                 fullWidth
-                value={newPostData.title}
+                value={updatedPostData.title}
                 name="title"
                 onChange={(e) => handleChange(e.target.name, e.target.value)}
               />
@@ -71,20 +82,20 @@ const FormPopup: React.FC = () => {
                 multiline
                 minRows={3}
                 maxRows={5}
-                value={newPostData.body}
+                value={updatedPostData.body}
                 name="body"
                 onChange={(e) => handleChange(e.target.name, e.target.value)}
               />
             </Stack>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit">Add</Button>
+              <Button type="submit">Submit</Button>
             </DialogActions>
           </Box>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 };
 
-export default FormPopup;
+export default EditPopup;
