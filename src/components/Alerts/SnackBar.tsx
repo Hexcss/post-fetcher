@@ -1,17 +1,18 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../../state";
-
-import Button from "@mui/material/Button";
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
+import { Button, Snackbar, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+
+import { actionCreators, State } from "../../state";
 
 const SnackBar: React.FC = () => {
   const isSnackBarOpen = useSelector((state: State) => state.isSnackBarOpen);
   const dispatch = useDispatch();
-  const { deleteLastPost, openSnackbar } = bindActionCreators(actionCreators, dispatch);
+  const { deleteLastPost, openSnackbar } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -27,7 +28,7 @@ const SnackBar: React.FC = () => {
   const handleUndo = () => {
     deleteLastPost();
     openSnackbar(false);
-  }
+  };
 
   const action = (
     <React.Fragment>

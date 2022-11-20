@@ -15,7 +15,7 @@ interface PostAction {
 }
 
 interface OpenAction {
-    type: ActionType.OPEN_FORM | ActionType.OPEN_SIDEBAR | ActionType.OPEN_POPUP | ActionType.OPEN_SNACKBAR | ActionType.OPEN_ALERT | ActionType.OPEN_EDIT_POPUP;
+    type: ActionType.OPEN_POPUP | ActionType.OPEN_SNACKBAR | ActionType.OPEN_EDIT_POPUP;
     payload: boolean;
 }
 

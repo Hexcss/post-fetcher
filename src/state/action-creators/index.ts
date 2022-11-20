@@ -1,2 +1,2 @@
-export { fetchData, deletePost, deleteLastPost, addPost, editPost, fetchPostToEdit  } from './postActions';
-export { openForm, openPopup, openSidebar, openSnackbar, openAlert, openEditPopup} from "./openActions";
+export { fetchData, deletePost, deleteLastPost, addPost, editPost, fetchPostToEdit } from './postActions';
+export { openPopup, openSnackbar, openEditPopup } from "./openActions";

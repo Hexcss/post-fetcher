@@ -74,12 +74,12 @@ export const fetchPostToEdit = (id: number) => {
 export const editPost = (id: number, editedPost: IPost) => {
   return async (dispatch: Dispatch<Action>) => {
     const { data } = store.getState();
-    axios.patch(`https://jsonplaceholder.typicode.com/posts/${id}`, {id, ...editedPost});
+    axios.patch(`https://jsonplaceholder.typicode.com/posts/${id}`, { id, ...editedPost });
     const postIndex: number = data.findIndex(post => post.id === id);
     if (postIndex === -1) {
       return;
     }
-    const updatedPost: IPost = { ...data[postIndex], ... editedPost };
+    const updatedPost: IPost = { ...data[postIndex], ...editedPost };
     const updatedPosts: PostState = [
       ...data.slice(0, postIndex),
       updatedPost,

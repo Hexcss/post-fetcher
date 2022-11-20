@@ -1,27 +1,31 @@
-import * as React from 'react';
+import * as React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { motion } from "framer-motion";
-
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Box,
+  Stack,
+} from "@mui/material";
 
 import { IPost } from "../../state/actions";
 import { actionCreators, State } from "../../state";
-import { newspaper, flip, dropIn, badSuspension } from "../../animations";
+import { flip } from "../../animations";
 
 const NewFormPopup: React.FC = () => {
   const isPopupOpen: boolean = useSelector((state: State) => state.isPopupOpen);
   const dispatch = useDispatch();
-  const { addPost, openPopup, openSnackbar } = bindActionCreators(actionCreators, dispatch);
+  const { addPost, openPopup, openSnackbar } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
 
   const handleClose = (): void => {
     openPopup(false);
@@ -38,8 +42,13 @@ const NewFormPopup: React.FC = () => {
   };
 
   return (
-      <Dialog open={isPopupOpen} onClose={handleClose} fullWidth>
-        <motion.div variants={flip} initial="hidden" animate="visible" exit="exit" >
+    <Dialog open={isPopupOpen} onClose={handleClose} fullWidth>
+      <motion.div
+        variants={flip}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
         <DialogTitle>Add New Post</DialogTitle>
         <DialogContent>
           <DialogContentText>Create A New Post</DialogContentText>
@@ -85,8 +94,8 @@ const NewFormPopup: React.FC = () => {
             </DialogActions>
           </Box>
         </DialogContent>
-        </motion.div>
-      </Dialog>
+      </motion.div>
+    </Dialog>
   );
 };
 

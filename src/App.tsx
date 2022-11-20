@@ -1,9 +1,17 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { useEffect } from "react";
-import { Container, Grid, Typography, Box, Button, Stack } from "@mui/material";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import {
+  Container,
+  Grid,
+  Typography,
+  Box,
+  Button,
+  Stack,
+  ClickAwayListener,
+} from "@mui/material";
 
 import { actionCreators, State } from "./state";
 import { PostState } from "./state/actions";
@@ -15,16 +23,16 @@ import {
   NewFormPopup,
   Snackbar,
   EditPopup,
+  AlertSuccess,
 } from "./components";
 
 const App: React.FC = () => {
-
   const posts: PostState = useSelector((state: State) => state.data);
-  const isFormOpen = useSelector((state: State) => state.isFormOpen);
-  const isAlertOpen = useSelector((state: State) => state.isAlertOpen);
-  const isPopupOpen = useSelector((state: State) => state.isPopupOpen);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const { fetchData, openForm, openAlert } = bindActionCreators(
+  const { fetchData } = bindActionCreators(
     actionCreators,
     dispatch
   );
@@ -35,8 +43,8 @@ const App: React.FC = () => {
 
   return (
     <React.Fragment>
-      <NavBar />
-      <SideBar />
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
+      <SideBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
       <Container maxWidth="md">
         <NewFormPopup />
         <EditPopup />
@@ -53,9 +61,9 @@ const App: React.FC = () => {
             <Button
               variant="outlined"
               onClick={() => {
-                openForm(!isFormOpen);
+                setIsFormOpen(!isFormOpen);
                 if (isAlertOpen) {
-                  openAlert(false);
+                  setIsAlertOpen(false);
                 }
               }}
               component={motion.button}
@@ -66,7 +74,8 @@ const App: React.FC = () => {
             </Button>
           </Stack>
         </Box>
-        <PostModal />
+        <AlertSuccess isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} />
+        <PostModal isFormOpen={isFormOpen} isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} />
         <Box sx={{ mb: 3 }}>
           <Grid container spacing={3}>
             {posts.map((post) => (

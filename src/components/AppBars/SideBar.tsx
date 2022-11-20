@@ -1,43 +1,87 @@
-import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../../state";
+import { actionCreators } from "../../state";
 
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from '@mui/icons-material/Close';
-import Drawer from "@mui/material/Drawer";
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
+import {
+  Typography,
+  IconButton,
+  Drawer,
+  Stack,
+  Divider,
+  Button,
+  ClickAwayListener,
+  Box,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
-const SideBar: React.FC = () => {
+interface IProps {
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  const isSideBarOpen = useSelector((state: State) => state.isSidebarOpen);
+const SideBar: React.FC<IProps> = ({ isSidebarOpen, setIsSidebarOpen}) => {
   const dispatch = useDispatch();
-  const { openSidebar, openPopup } = bindActionCreators(actionCreators, dispatch);
+  const { openPopup } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
+
+  const handleClickAway = (): void => {
+    if (isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
+  };
 
   return (
-    <React.Fragment>
-      <Drawer anchor="left" open={isSideBarOpen}>
-        <Stack sx={{ mx: 3 }} direction="row">
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          onClick={() => openSidebar(!isSideBarOpen)}
-        >
-          <CloseIcon />
-        </IconButton>
-        <Typography component="h2" variant="h5" fontWeight="bold" sx={{ p: 1 }}>
-          POSTS
-        </Typography>
-        </Stack>
-        <Divider color="#fff" sx={{ borderBottomWidth: 2 }}/>
-        <Button color="primary" onClick={() => openPopup(true)}>New Post</Button>
-      </Drawer>
-    </React.Fragment>
+    <Drawer anchor="left" open={isSidebarOpen}>
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <Box>
+          <Stack sx={{ mx: 3 }} direction="row">
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography
+              component="h2"
+              variant="h5"
+              fontWeight="bold"
+              sx={{ p: 1 }}
+            >
+              POSTS
+            </Typography>
+          </Stack>
+          <Stack spacing={1}>
+            <Divider sx={{ borderBottomWidth: 3 }} light={false} />
+            <Button
+              color="primary"
+              onClick={() => openPopup(true)}
+              sx={{ alignSelf: "center" }}
+            >
+              New Post
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => openPopup(true)}
+              sx={{ alignSelf: "center" }}
+            >
+              New Post
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => openPopup(true)}
+              sx={{ alignSelf: "center" }}
+            >
+              New Post
+            </Button>
+          </Stack>
+        </Box>
+      </ClickAwayListener>
+    </Drawer>
   );
 };
 
