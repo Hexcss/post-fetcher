@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { motion } from "framer-motion";
 import {
@@ -16,19 +16,19 @@ import {
 } from "@mui/material";
 
 import { IPost } from "../../state/actions";
-import { actionCreators, State } from "../../state";
-import { flip } from "../../animations";
+import { actionCreators } from "../../state";
+import { flip } from "../../assets/animations";
+import { IProps } from "../../utils/interfaces";
 
-const NewFormPopup: React.FC = () => {
-  const isPopupOpen: boolean = useSelector((state: State) => state.isPopupOpen);
+const NewFormPopup: React.FC<IProps> = ({ open, setOpen }) => {
   const dispatch = useDispatch();
-  const { addPost, openPopup, openSnackbar } = bindActionCreators(
+  const { addPost } = bindActionCreators(
     actionCreators,
     dispatch
   );
 
   const handleClose = (): void => {
-    openPopup(false);
+    setOpen({ ...open, formPopup: false });
   };
 
   const [newPostData, setNewPostData] = useState<IPost>({
@@ -37,12 +37,21 @@ const NewFormPopup: React.FC = () => {
     body: "",
   });
 
-  const handleChange = (key: string, value: string) => {
+  const handleChange = (key: string, value: string): void => {
     setNewPostData((state) => ({ ...state, [key]: value }));
   };
 
+  const handleSubmit = () => {
+    addPost(newPostData);
+    setNewPostData({
+      title: "",
+      body: "",
+    });
+    setOpen({...open, snackbar: true, formPopup: false});
+  }
+
   return (
-    <Dialog open={isPopupOpen} onClose={handleClose} fullWidth>
+    <Dialog open={open.formPopup} onClose={handleClose} fullWidth>
       <motion.div
         variants={flip}
         initial="hidden"
@@ -56,13 +65,7 @@ const NewFormPopup: React.FC = () => {
             component="form"
             onSubmit={(e) => {
               e.preventDefault();
-              addPost(newPostData);
-              openSnackbar(true);
-              setNewPostData({
-                title: "",
-                body: "",
-              });
-              handleClose();
+              handleSubmit();
             }}
           >
             <Stack direction="column" spacing={2}>

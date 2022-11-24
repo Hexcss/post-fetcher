@@ -1,15 +1,11 @@
 import { Alert, IconButton, Collapse } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { IProps } from "../../utils/interfaces";
 
-interface IProps {
-  isAlertOpen: boolean;
-  setIsAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const AlertSuccess: React.FC<IProps> = ({ isAlertOpen, setIsAlertOpen }) => {
+const AlertSuccess: React.FC<IProps> = ({ open, setOpen }) => {
 
   return (
-    <Collapse in={isAlertOpen}>
+    <Collapse in={open.alert}>
       <Alert
         action={
           <IconButton
@@ -17,7 +13,7 @@ const AlertSuccess: React.FC<IProps> = ({ isAlertOpen, setIsAlertOpen }) => {
             color="inherit"
             size="small"
             onClick={() => {
-              setIsAlertOpen(false);
+              setOpen({ ...open, alert: false });
             }}
           >
             <CloseIcon fontSize="inherit" />

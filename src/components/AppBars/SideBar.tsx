@@ -1,7 +1,3 @@
-import { useDispatch} from "react-redux";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "../../state";
-
 import {
   Typography,
   IconButton,
@@ -13,27 +9,22 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { IProps } from "../../utils/interfaces";
 
-interface IProps {
-  isSidebarOpen: boolean;
-  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const SideBar: React.FC<IProps> = ({ open, setOpen }) => {
 
-const SideBar: React.FC<IProps> = ({ isSidebarOpen, setIsSidebarOpen}) => {
-  const dispatch = useDispatch();
-  const { openPopup } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
+  const handleClick = () => {
+    setOpen({ ...open, formPopup: true })
+  }
 
   const handleClickAway = (): void => {
-    if (isSidebarOpen) {
-      setIsSidebarOpen(false);
+    if (open.sidebar) {
+      setOpen({ ...open, sidebar: false });
     }
   };
 
   return (
-    <Drawer anchor="left" open={isSidebarOpen}>
+    <Drawer anchor="left" open={open.sidebar}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <Box>
           <Stack sx={{ mx: 3 }} direction="row">
@@ -42,7 +33,7 @@ const SideBar: React.FC<IProps> = ({ isSidebarOpen, setIsSidebarOpen}) => {
               edge="start"
               color="inherit"
               aria-label="menu"
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              onClick={() => setOpen({ ...open, sidebar: !open.sidebar })}
             >
               <CloseIcon />
             </IconButton>
@@ -59,21 +50,21 @@ const SideBar: React.FC<IProps> = ({ isSidebarOpen, setIsSidebarOpen}) => {
             <Divider sx={{ borderBottomWidth: 3 }} light={false} />
             <Button
               color="primary"
-              onClick={() => openPopup(true)}
+              onClick={handleClick}
               sx={{ alignSelf: "center" }}
             >
               New Post
             </Button>
             <Button
               color="primary"
-              onClick={() => openPopup(true)}
+              onClick={handleClick}
               sx={{ alignSelf: "center" }}
             >
               New Post
             </Button>
             <Button
               color="primary"
-              onClick={() => openPopup(true)}
+              onClick={handleClick}
               sx={{ alignSelf: "center" }}
             >
               New Post

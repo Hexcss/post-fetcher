@@ -1,9 +1,8 @@
-import { IPost } from "./../actions/index";
 import axios from "axios";
 import { Dispatch } from "redux";
 
 import { ActionType } from "../action-types";
-import { Action, PostState } from "../actions";
+import { Action, PostState, IPost } from "../actions";
 import { store } from "../store";
 
 export const fetchData = () => {
@@ -23,8 +22,6 @@ export const deletePost = (id: number) => {
     const { data } = store.getState();
     axios
       .delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
     const updatedPosts: PostState = data.filter((post) => post.id !== id);
     dispatch({
       type: ActionType.DELETE,
@@ -52,8 +49,6 @@ export const addPost = (newPost: IPost) => {
     const { data } = store.getState();
     axios
       .post("https://jsonplaceholder.typicode.com/posts", newPost)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
     const updatedPosts: PostState = data.concat(newPost);
     dispatch({
       type: ActionType.POST,

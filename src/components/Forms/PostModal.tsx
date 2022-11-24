@@ -7,18 +7,11 @@ import { motion } from "framer-motion";
 import { Box, TextField, Button, Stack, Collapse } from "@mui/material";
 
 import { IPost } from "../../state/actions";
-//import AlertSuccess from "../Alerts/AlertSuccess";
-
-interface IProps {
-  isFormOpen: boolean;
-  isAlertOpen: boolean;
-  setIsAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { IProps } from "../../utils/interfaces";
 
 const PostModal: React.FC<IProps> = ({
-  isFormOpen,
-  isAlertOpen,
-  setIsAlertOpen,
+  open,
+  setOpen,
 }) => {
   const [newPostData, setNewPostData] = useState<IPost>({
     id: Math.round(Math.random() * 100),
@@ -31,24 +24,29 @@ const PostModal: React.FC<IProps> = ({
 
   const handleChange = (key: string, value: string) => {
     setNewPostData((state) => ({ ...state, [key]: value }));
-    if (isAlertOpen) {
-      setIsAlertOpen(false);
+    if (open.alert) {
+      setOpen({ ...open, alert: !open.alert });
     }
   };
 
+  const handleSubmit = ():void => {
+    addPost(newPostData);
+    setOpen({ ...open, alert: true });
+    setNewPostData({
+      title: "",
+      body: "",
+    });
+    
+  }
+
   return (
-    <Collapse in={isFormOpen}>
+    <Collapse in={open.form}>
       <Box
         sx={{ mb: 3 }}
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
-          addPost(newPostData);
-          setIsAlertOpen(true);
-          setNewPostData({
-            title: "",
-            body: "",
-          });
+          handleSubmit();
         }}
       >
         <Stack direction="column" spacing={2}>

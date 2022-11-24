@@ -1,6 +1,3 @@
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
-
 export const newspaper = {
   hidden: {
     transform: "scale(0) rotate(720deg)",

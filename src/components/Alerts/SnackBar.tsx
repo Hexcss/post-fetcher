@@ -1,15 +1,15 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Snackbar, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { actionCreators, State } from "../../state";
+import { actionCreators } from "../../state";
+import { IProps } from "../../utils/interfaces";
 
-const SnackBar: React.FC = () => {
-  const isSnackBarOpen = useSelector((state: State) => state.isSnackBarOpen);
+const SnackBar: React.FC<IProps> = ({ open, setOpen }) => {
   const dispatch = useDispatch();
-  const { deleteLastPost, openSnackbar } = bindActionCreators(
+  const { deleteLastPost } = bindActionCreators(
     actionCreators,
     dispatch
   );
@@ -22,12 +22,12 @@ const SnackBar: React.FC = () => {
       return;
     }
 
-    openSnackbar(false);
+    setOpen({...open, snackbar: !open.snackbar});
   };
 
   const handleUndo = () => {
     deleteLastPost();
-    openSnackbar(false);
+    setOpen({...open, snackbar: !open.snackbar});
   };
 
   const action = (
@@ -49,7 +49,7 @@ const SnackBar: React.FC = () => {
   return (
     <div>
       <Snackbar
-        open={isSnackBarOpen}
+        open={open.snackbar}
         autoHideDuration={6000}
         onClose={handleClose}
         message="New Post Added"

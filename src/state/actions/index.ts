@@ -14,14 +14,9 @@ interface PostAction {
     payload: PostState;
 }
 
-interface OpenAction {
-    type: ActionType.OPEN_POPUP | ActionType.OPEN_SNACKBAR | ActionType.OPEN_EDIT_POPUP;
-    payload: boolean;
-}
-
 interface FetchEditPost {
     type: ActionType.FETCH_POST_TO_EDIT,
     payload: number,
 }
 
-export type Action = PostAction | OpenAction | FetchEditPost;
+export type Action = PostAction | FetchEditPost;

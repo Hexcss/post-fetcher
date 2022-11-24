@@ -15,9 +15,9 @@ import {
 } from "@mui/material";
 
 import { IPost, PostState } from "../../state/actions";
+import { IProps } from "../../utils/interfaces";
 
-const EditPopup: React.FC = () => {
-  const isEditOpen: boolean = useSelector((state: State) => state.isEditOpen);
+const EditPopup: React.FC<IProps> = ({ open, setOpen }) => {
   const postToEditID: number = useSelector(
     (state: State) => state.postToEditID
   );
@@ -25,16 +25,10 @@ const EditPopup: React.FC = () => {
   const postIndex: number = posts.findIndex((post) => post.id === postToEditID);
   const postToEdit: IPost = { ...posts[postIndex] };
   const dispatch = useDispatch();
-  const { editPost, openEditPopup } = bindActionCreators(
+  const { editPost } = bindActionCreators(
     actionCreators,
     dispatch
   );
-
-  const handleClose = (): void => {
-    openEditPopup(false);
-  };
-
-  console.log(postToEdit.title, postToEdit.body);
 
   const [updatedPostData, setUpdatedPostData] = useState<IPost>({
     id: 0,
@@ -54,9 +48,13 @@ const EditPopup: React.FC = () => {
     setUpdatedPostData((state) => ({ ...state, [key]: value }));
   };
 
+  const handleClose = (): void => {
+    setOpen({...open, edit: false});
+  };
+
   return (
     <>
-      <Dialog open={isEditOpen} onClose={handleClose} fullWidth>
+      <Dialog open={open.edit} onClose={handleClose} fullWidth>
         <DialogTitle>Edit Post</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 1 }}>

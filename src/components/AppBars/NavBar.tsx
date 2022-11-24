@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import { motion } from "framer-motion";
 import {
   AppBar,
   Box,
@@ -10,23 +10,23 @@ import {
   IconButton,
 } from "@mui/material";
 
-import { actionCreators, State } from "../../state";
+import { IProps } from "../../utils/interfaces";
 
-interface IProps {
-  isSidebarOpen: boolean;
-  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const NavBar: React.FC<IProps> = ({ open, setOpen }) => {
+  let navigate = useNavigate();
+  const { pathname } = useLocation();
 
-const NavBar: React.FC<IProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
-  const dispatch = useDispatch();
-  const { openPopup } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
+  const handleClick = () => {
+    if (pathname === "/") {
+      setOpen({ ...open, formPopup: true })
+    } else {
+      navigate("/");
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" component={motion.div} initial={{ y: -250 }} animate={{ y: 0 }} transition={{ delay: 0.2, type: "tween", duration: 0.7 }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -34,15 +34,15 @@ const NavBar: React.FC<IProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            onClick={() => setOpen({...open, sidebar: true})}
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Post Fetcher
           </Typography>
-          <Button color="inherit" onClick={() => openPopup(true)}>
-            New Post
+          <Button color="inherit" onClick={handleClick}>
+            {pathname === "/" ? "New Post" : "Home"}
           </Button>
         </Toolbar>
       </AppBar>
